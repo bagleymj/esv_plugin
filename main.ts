@@ -81,7 +81,8 @@ export default class ESVPlugin extends Plugin {
 			// Write the fetched passage to the active note
 			const editor = this.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
 			if (editor) {
-				editor.replaceRange(passageText, {line: 0, ch: 0});
+				const cursorPos = editor.getCursor();
+				editor.replaceRange(passageText, cursorPos);
 				new Notice(`Passage added to ${noteTitle}`);
 			}
 		} catch (error) {
