@@ -79,11 +79,33 @@ export default class ESVPlugin extends Plugin {
 			const passageText = data.passages.join("\n\n");
 
 			const lines: string[] = passageText.split("\n");
-
 			const titleLine = lines.shift() || "No Title";
 
+			let blankLineCount = 0;
+			let afterBlockquote = false;
+
+			const processedLines = lines.map(line => {
+				const trimmed = line.trim();
+				if (trimmed === "") {
+					blankLineCount++;
+					if (blankLineCount >= 2) {
+						afterBlockquote = true;
+					}
+					return "> ";
+				} else {
+					blankLineCount = 0;
+					if (afterBlockquote) {
+						const noLeading = line.replace(/^\s+/, "");
+						afterBlockquote = false;
+						return `${noLeading}`;
+					} else {
+						return `> ${line}`;
+					}
+				}
+			});
+
 			const calloutContent = `> [!example]+ ${titleLine}\n` 
-				+ lines.map(line => `> ${line}`).join("\n")
+				+ processedLines.join("\n")
 
 			// Write the fetched passage to the active note
 			const editor = this.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
