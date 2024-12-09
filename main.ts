@@ -5,10 +5,12 @@ const ESV_API_BASE_URL = "https://api.esv.org/v3/passage/text/";
 
 interface ESVPluginSettings {
 	apiKey: string;
+	showFootnotes: boolean;
 }
 
 const DEFAULT_SETTINGS: ESVPluginSettings = {
-	apiKey: ""
+	apiKey: "",
+	showFootnotes: true
 }
 
 export default class ESVPlugin extends Plugin {
@@ -58,10 +60,18 @@ export default class ESVPlugin extends Plugin {
 			return;
 		}
 
+		const queryParams: string[] = [];
+		queryParams.push(`q=${formattedTitle}`);
+		queryParams.push(`indent-paragraphs=0`);
+		if(this.settings.showFootnotes === false) {
+			queryParams.push(`include-footnotes=false`);
+		}
+		const url = `${ESV_API_BASE_URL}?${queryParams.join('&')}`;
 		// Make a request to the ESV API
+		console.log(url);
 		let response: Response;
 		try {
-			response = await fetch(`${ESV_API_BASE_URL}?q=${formattedTitle}`, {
+			response = await fetch(url, {
 				headers: {
 					"Authorization": `Token ${apiKey}`
 				}
@@ -80,10 +90,10 @@ export default class ESVPlugin extends Plugin {
 
 			const lines: string[] = passageText.split("\n");
 			const titleLine = lines.shift() || "No Title";
-
+			
 			let blankLineCount = 0;
 			let afterBlockquote = false;
-
+			
 			const processedLines = lines.map(line => {
 				const trimmed = line.trim();
 				if (trimmed === "") {
@@ -97,7 +107,7 @@ export default class ESVPlugin extends Plugin {
 					if (afterBlockquote) {
 						const noLeading = line.replace(/^\s+/, "");
 						afterBlockquote = false;
-						return `${noLeading}`;
+						return `> ${noLeading}`;
 					} else {
 						return `> ${line}`;
 					}
@@ -147,5 +157,17 @@ class ESVSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 			})
 		);
+		// Footnotes Setting
+		new Setting(containerEl)
+			.setName('Show Footnotes')
+			.setDesc('Include footnotes in the fetched passage')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showFootnotes)
+				.onChange(async (value) => {
+					this.plugin.settings.showFootnotes = value;
+					await this.plugin.saveSettings();
+				}					
+				)
+			)
 	}
   }
