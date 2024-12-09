@@ -9,6 +9,7 @@ interface ESVPluginSettings {
 	showHeadings: boolean;
 	showVerseNumbers: boolean;
 	useCallout: boolean;
+	calloutType: string;
 }
 
 const DEFAULT_SETTINGS: ESVPluginSettings = {
@@ -16,7 +17,8 @@ const DEFAULT_SETTINGS: ESVPluginSettings = {
 	showFootnotes: true,
 	showHeadings: true,
 	showVerseNumbers: true,
-	useCallout: true
+	useCallout: true,
+	calloutType: "example"
 }
 
 export default class ESVPlugin extends Plugin {
@@ -105,7 +107,7 @@ export default class ESVPlugin extends Plugin {
 			let titlePrefix = "";
 			let linePrefix = "";
 			if (this.settings.useCallout) {
-				titlePrefix = "> [!example]+ ";
+				titlePrefix = `> [!${this.settings.calloutType}]+ `;
 				linePrefix = "> "
 			}
 			let blankLineCount = 0;
@@ -222,5 +224,17 @@ class ESVSettingTab extends PluginSettingTab {
 				}					
 				)
 			)
+		//Callout Type
+		new Setting(containerEl)
+			.setName('Callout type')
+			.setDesc('Type of callout that callout feature uses')
+			.addText(text => text
+				.setPlaceholder('Enter callout type (e.g. note, warn, info)')
+				.setValue(this.plugin.settings.calloutType)
+				.onChange(async (value) => {
+					this.plugin.settings.calloutType = value.trim();
+					await this.plugin.saveSettings();
+			})
+		);
 	}
   }
