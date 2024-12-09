@@ -78,11 +78,18 @@ export default class ESVPlugin extends Plugin {
 			// Extract the passage text from the API response
 			const passageText = data.passages.join("\n\n");
 
+			const lines: string[] = passageText.split("\n");
+
+			const titleLine = lines.shift() || "No Title";
+
+			const calloutContent = `> [!example]+ ${titleLine}\n` 
+				+ lines.map(line => `> ${line}`).join("\n")
+
 			// Write the fetched passage to the active note
 			const editor = this.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
 			if (editor) {
 				const cursorPos = editor.getCursor();
-				editor.replaceRange(passageText, cursorPos);
+				editor.replaceRange(calloutContent, cursorPos);
 				new Notice(`Passage added to ${noteTitle}`);
 			}
 		} catch (error) {
