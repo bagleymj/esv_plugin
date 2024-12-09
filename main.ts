@@ -7,12 +7,14 @@ interface ESVPluginSettings {
 	apiKey: string;
 	showFootnotes: boolean;
 	showHeadings: boolean;
+	showVerseNumbers: boolean;
 }
 
 const DEFAULT_SETTINGS: ESVPluginSettings = {
 	apiKey: "",
 	showFootnotes: true,
-	showHeadings: true
+	showHeadings: true,
+	showVerseNumbers: true
 }
 
 export default class ESVPlugin extends Plugin {
@@ -71,9 +73,11 @@ export default class ESVPlugin extends Plugin {
 		if(this.settings.showHeadings === false) {
 			queryParams.push(`include-headings=false`);
 		}
+		if(this.settings.showVerseNumbers === false) {
+			queryParams.push(`include-verse-numbers=false`);
+		}
 		const url = `${ESV_API_BASE_URL}?${queryParams.join('&')}`;
 		// Make a request to the ESV API
-		console.log(url);
 		let response: Response;
 		try {
 			response = await fetch(url, {
@@ -182,6 +186,18 @@ class ESVSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showHeadings)
 				.onChange(async (value) => {
 					this.plugin.settings.showHeadings = value;
+					await this.plugin.saveSettings();
+				}					
+				)
+			)
+		//Verse Number Setting
+		new Setting(containerEl)
+			.setName('Show Verse Numbers')
+			.setDesc('Include verse numbers in the fetched passage')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showVerseNumbers)
+				.onChange(async (value) => {
+					this.plugin.settings.showVerseNumbers = value;
 					await this.plugin.saveSettings();
 				}					
 				)
