@@ -11,7 +11,7 @@ Retrieve an ESV passage based on the current note’s title. For example, a note
 
 ## Requirements
 ### ESV API Key:
-This plugin requires an ESV API key, which you can obtain for free by registering at the [ESV API website](https://api.esv.org/docs/). Once you have an API key, open the plugin’s settings and enter it there.
+This plugin requires an ESV API key, which you can obtain for free by registering at the [ESV API website](https://api.esv.org).  Be sure to read over and abide by the usage guidelines. Once you have an API key, open the plugin’s settings and enter it there.
 
 ## How It Works
 1. Name Your Note with a Bible Reference:
