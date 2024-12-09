@@ -8,13 +8,15 @@ interface ESVPluginSettings {
 	showFootnotes: boolean;
 	showHeadings: boolean;
 	showVerseNumbers: boolean;
+	useCallout: boolean;
 }
 
 const DEFAULT_SETTINGS: ESVPluginSettings = {
 	apiKey: "",
 	showFootnotes: true,
 	showHeadings: true,
-	showVerseNumbers: true
+	showVerseNumbers: true,
+	useCallout: true
 }
 
 export default class ESVPlugin extends Plugin {
@@ -100,6 +102,12 @@ export default class ESVPlugin extends Plugin {
 			const lines: string[] = passageText.split("\n");
 			const titleLine = lines.shift() || "No Title";
 			
+			let titlePrefix = "";
+			let linePrefix = "";
+			if (this.settings.useCallout) {
+				titlePrefix = "> [!example]+ ";
+				linePrefix = "> "
+			}
 			let blankLineCount = 0;
 			let afterBlockquote = false;
 			
@@ -110,20 +118,20 @@ export default class ESVPlugin extends Plugin {
 					if (blankLineCount >= 2) {
 						afterBlockquote = true;
 					}
-					return "> ";
+					return linePrefix;
 				} else {
 					blankLineCount = 0;
 					if (afterBlockquote) {
 						const noLeading = line.replace(/^\s+/, "");
 						afterBlockquote = false;
-						return `> ${noLeading}`;
+						return `${linePrefix}${noLeading}`;
 					} else {
-						return `> ${line}`;
+						return `${linePrefix}${line}`;
 					}
 				}
 			});
 
-			const calloutContent = `> [!example]+ ${titleLine}\n` 
+			const calloutContent = `${titlePrefix}${titleLine}\n` 
 				+ processedLines.join("\n")
 
 			// Write the fetched passage to the active note
@@ -198,6 +206,18 @@ class ESVSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showVerseNumbers)
 				.onChange(async (value) => {
 					this.plugin.settings.showVerseNumbers = value;
+					await this.plugin.saveSettings();
+				}					
+				)
+			)
+		//Callout Setting
+		new Setting(containerEl)
+			.setName('Use Callout')
+			.setDesc('Insert fetched passage into a callout')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.useCallout)
+				.onChange(async (value) => {
+					this.plugin.settings.useCallout = value;
 					await this.plugin.saveSettings();
 				}					
 				)
