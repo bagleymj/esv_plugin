@@ -6,11 +6,13 @@ const ESV_API_BASE_URL = "https://api.esv.org/v3/passage/text/";
 interface ESVPluginSettings {
 	apiKey: string;
 	showFootnotes: boolean;
+	showHeadings: boolean;
 }
 
 const DEFAULT_SETTINGS: ESVPluginSettings = {
 	apiKey: "",
-	showFootnotes: true
+	showFootnotes: true,
+	showHeadings: true
 }
 
 export default class ESVPlugin extends Plugin {
@@ -65,6 +67,9 @@ export default class ESVPlugin extends Plugin {
 		queryParams.push(`indent-paragraphs=0`);
 		if(this.settings.showFootnotes === false) {
 			queryParams.push(`include-footnotes=false`);
+		}
+		if(this.settings.showHeadings === false) {
+			queryParams.push(`include-headings=false`);
 		}
 		const url = `${ESV_API_BASE_URL}?${queryParams.join('&')}`;
 		// Make a request to the ESV API
@@ -165,6 +170,18 @@ class ESVSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.showFootnotes)
 				.onChange(async (value) => {
 					this.plugin.settings.showFootnotes = value;
+					await this.plugin.saveSettings();
+				}					
+				)
+			)
+		//Heading Setting
+		new Setting(containerEl)
+			.setName('Show Headings')
+			.setDesc('Include section headings in the fetched passage')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showHeadings)
+				.onChange(async (value) => {
+					this.plugin.settings.showHeadings = value;
 					await this.plugin.saveSettings();
 				}					
 				)
