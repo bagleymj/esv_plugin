@@ -1,11 +1,11 @@
 {
 	"id": "esv",
-	"name": "ESV Plugin",
+	"name": "ESV Bible Passage Fetcher",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Import Bible Passages to Notes",
 	"author": "Mitchell Bagley",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"authorUrl": "https://github.com/bagleymj",
+	"fundingUrl": "",
 	"isDesktopOnly": false
 }
