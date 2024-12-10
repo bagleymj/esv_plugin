@@ -30,11 +30,7 @@ export default class ESVPlugin extends Plugin {
 		this.addCommand({
 			id: 'fetch-esv-passage',
 			name: 'Fetch ESV Passage',
-			callback: () => this.fetchESVPassage(),
-			hotkeys: [{
-				modifiers: ["Ctrl", "Shift"],
-				key: "E"
-			}]
+			callback: () => this.fetchESVPassage()
 		});
 		this.addSettingTab(new ESVSettingTab(this.app, this));
 	}

@@ -22,7 +22,7 @@ This plugin requires an ESV API key, which you can obtain for free by registerin
  	  - Romans 8 for a whole chapter.	
 	    Note: Colons (:) are not allowed in Obsidian note titles. Instead, use a period (.) to separate chapter and verse. For example, John 3.16 instead of John 3:16.
 2.  Fetch the Passage:
-    Open the note and run the “Fetch ESV Passage” command from the command palette (Hotkey: Ctrl+Shift+E by default). The plugin will query the ESV API and insert the passage text at your cursor position.
+    Open the note and run the “Fetch ESV Passage” command from the command palette. The plugin will query the ESV API and insert the passage text at your cursor position.
 	3.	Adjust Settings (Optional):
     In the plugin settings, you can:
     -	Toggle footnotes, headings, and verse numbers on or off.
