@@ -1,6 +1,6 @@
 # ESV Bible Passage Fetcher
 
-This Obsidian plugin allows you to quickly fetch ESV (English Standard Version) Bible passages for use in your notes. By using the note’s title as the passage reference, you can instantly look up and embed Scripture without leaving your writing environment.
+This Obsidian plugin allows you to quickly fetch ESV (English Standard Version) Bible passages for use in your Obsidian notes. By using the note’s title as the passage reference, you can instantly look up and embed Scripture without leaving your writing environment.
 
 ## Features
 - Fetch Bible Passage:
@@ -19,15 +19,15 @@ This plugin requires an ESV API key, which you can obtain for free by registerin
     Example:
 	  - John 3.16 for a single verse
 	  - Genesis 1.1-5 for a range of verses
+ 	  - Romans 8 for a whole chapter.	
 	    Note: Colons (:) are not allowed in Obsidian note titles. Instead, use a period (.) to separate chapter and verse. For example, John 3.16 instead of John 3:16.
 2.  Fetch the Passage:
-    Open the note and run the “Fetch ESV Passage” command from the command palette. The plugin will query the ESV API and insert the passage text at your cursor position.
+    Open the note and run the “Fetch ESV Passage” command from the command palette (Hotkey: Ctrl+Shift+E by default). The plugin will query the ESV API and insert the passage text at your cursor position.
 	3.	Adjust Settings (Optional):
     In the plugin settings, you can:
     -	Toggle footnotes, headings, and verse numbers on or off.
     -	Enable or disable callouts.
     -	Select the callout type, if enabled, to visually style the fetched passage.
-After adjusting the settings, run the command again, and the formatting will follow your preferences.
 
 ## Installation
 From the Obsidian Community Plugins:
